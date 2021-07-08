@@ -15,5 +15,4 @@ class LexicalAnalysis{
 		FILE* m_file;
 };
 
-
 #endif // LEXICAL_ANALYSIS_H

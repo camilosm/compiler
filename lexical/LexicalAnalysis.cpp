@@ -169,6 +169,7 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				break;
+			// done up to here, needs testing
 			case 10:
 
 				break;
