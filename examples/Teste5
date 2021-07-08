@@ -11,12 +11,12 @@ init
 
 	maior := 0;
 	if ( a>b && a>c )
-	maior = a;
+		maior = a;
 	else
-	if (b>c)
-	maior = b;
-	else
-	maior = c;
+		if (b>c)
+			maior = b;
+		else
+			maior = c;
 
 	write("O maior número é: ");
 	write(maior);

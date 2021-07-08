@@ -9,18 +9,18 @@ INIT
 	write("Quantos dados deseja informar?" );
 	read (qtd);
 	if (qtd>=2){
-	i=0;
-	do{
-	write("Altura: ");
-	read (altura);
-	soma = soma+altura;
-	i = i + 1;
-	}while( i < qtd);
-	media = soma / qtd;
-	write("Media: ");
-	write (media);
+		i=0;
+		do{
+			write("Altura: ");
+			read (altura);
+			soma = soma+altura;
+			i = i + 1;
+		}while( i < qtd);
+		media = soma / qtd;
+		write("Media: ");
+		write (media);
 	}
 	else{
-	write("Quantidade inválida.");
+		write("Quantidade inválida.");
 	}
 stop
