@@ -55,7 +55,7 @@ Lexeme SymbolTable::get(std::string token) {
 bool SymbolTable::put(std::string token, enum var_type type){
     if(this->contains(token))
         return false;
-    Lexeme lex(token, TKN_VAR);
+    Lexeme lex(token, TKN_ID);
     lex.data.type = type;
     m_st[token] = lex;
     return true;

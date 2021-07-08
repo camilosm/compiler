@@ -51,7 +51,7 @@ enum TokenType {
 	TKN_NUMBER_INT,		// integers
 	TKN_NUMBER_FLOAT,	// reals
 	TKN_LITERAL_STRING,	// strings
-	TKN_VAR				// variable
+	TKN_ID				// variable
 };
 
 inline std::string tt2str(enum TokenType type){
@@ -142,11 +142,11 @@ inline std::string tt2str(enum TokenType type){
 			return "NUMBER_FLOAT";
 		case TKN_LITERAL_STRING:
 			return "LITERAL_STRING";
-		case TKN_VAR:
-			return "VAR";
+		case TKN_ID:
+			return "IDENTIFIER";
 
 		default:
-			throw std::string("Invalid token type");
+			throw std::string("invalid token type");
 	}
 }
 
