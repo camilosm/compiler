@@ -12,6 +12,10 @@ LexicalAnalysis::~LexicalAnalysis(){
 		fclose(m_file);
 }
 
+int LexicalAnalysis::line() const {
+    return m_line;
+}
+
 Lexeme LexicalAnalysis::nextToken(){
 	int state;
 	Lexeme lex;

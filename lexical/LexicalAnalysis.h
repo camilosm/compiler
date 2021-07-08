@@ -8,6 +8,7 @@ class LexicalAnalysis{
 	public:
 		LexicalAnalysis(const char* filename);
 		virtual ~LexicalAnalysis();
+		int line() const;
 		Lexeme nextToken();
 	private:
 		int m_line;
