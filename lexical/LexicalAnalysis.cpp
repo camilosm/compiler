@@ -1,3 +1,6 @@
+#include <iostream>
+
+
 #include <string>
 #include <cctype>
 
@@ -23,8 +26,12 @@ Lexeme LexicalAnalysis::nextToken(){
 	state = 1;
 	while (state != 19 && state != 20){
 		int c = fgetc(m_file);
+
+		// std::cout << "[" << state << ", " << c << " ('" << (char) c << "')]" << std::endl;
+
 		if(c=='\n')
 			m_line++;
+
 		switch(state){
 			case 1:
 				if(c==' ' || c=='\t' || c=='\r' || c=='\n')
@@ -80,8 +87,11 @@ Lexeme LexicalAnalysis::nextToken(){
 						state=4;
 					else{
 						lex.token += '/';
-						if(c!=EOF)
+						if(c!=EOF){
 							ungetc(c, m_file);
+							if(c=='\n')
+								m_line--;
+						}
 						state = 19;
 					}
 				}
@@ -129,8 +139,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}						
 					state = 19;
 				}
 				break;
@@ -152,8 +165,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					state = 19;
 				}
 				break;
@@ -168,8 +184,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 10;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					state = 19;
 				}
 				break;
@@ -180,8 +199,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 10;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					lex.type = TKN_ID;
 					state = 20;
 				}
@@ -195,8 +217,11 @@ Lexeme LexicalAnalysis::nextToken(){
 				else{
 					lex.type = TKN_NUMBER_INT;
 					lex.data.int_value = 0;
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					state = 20;
 				}
 				break;
@@ -213,6 +238,8 @@ Lexeme LexicalAnalysis::nextToken(){
 				else{
 					lex.type = TKN_INVALID_TOKEN;
 					ungetc(c, m_file);
+					if(c=='\n')
+						m_line--;
 					state = 20;
 				}
 				break;
@@ -223,8 +250,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 13;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					lex.type = TKN_NUMBER_FLOAT;
 					lex.data.float_value = std::stof(lex.token);
 					state = 20;
@@ -241,8 +271,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 15;
 				}
 				else{
-					if(c!=EOF)
+					if(c!=EOF){
 						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					lex.type = TKN_NUMBER_INT;
 					lex.data.int_value = std::stoi(lex.token);
 					state = 20;
@@ -259,7 +292,8 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 20;
 				}
 				else{
-					ungetc(c,m_file);
+					if(c=='\n')
+						m_line--;
 					lex.type = TKN_INVALID_TOKEN;
 				}
 				break;
@@ -270,8 +304,11 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 16;
 				}
 				else{
-					if(c!=EOF)
-						ungetc(c,m_file);
+					if(c!=EOF){
+						ungetc(c, m_file);
+						if(c=='\n')
+							m_line--;
+					}
 					lex.type = TKN_NUMBER_FLOAT;
 					lex.data.float_value = std::stof(lex.token);
 					state = 20;
