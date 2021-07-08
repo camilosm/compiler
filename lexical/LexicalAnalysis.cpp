@@ -182,7 +182,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				else{
 					if(c!=EOF)
 						ungetc(c, m_file);
-					lex.type = TKN_VAR;
+					lex.type = TKN_ID;
 					state = 20;
 				}
 				break;
@@ -243,7 +243,6 @@ Lexeme LexicalAnalysis::nextToken(){
 				else{
 					if(c!=EOF)
 						ungetc(c, m_file);
-					lex.token += (char)c;
 					lex.type = TKN_NUMBER_INT;
 					lex.data.int_value = std::stoi(lex.token);
 					state = 20;
