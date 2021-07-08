@@ -158,6 +158,7 @@ Existe um único estado inicial - estado 1 - representado pelo estado com uma ar
 A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caracter do programa (*'s'*):
 *T(e<sub>x</sub>, 's') = e<sub>y</sub>*.
 O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.
+Isso é feito pois para encerrar o reconhecimento de alguns lexemas, é necessário ler o próximo símbolo para que seja confirmado. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.
 O analisador léxico implementa esse autômato.
 
 
