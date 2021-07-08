@@ -2,8 +2,8 @@ class Basic
 	int a,b,r;
 
 init
-	a = 1;
-	b = 1;
+	read(a);
+	read(b);
 	r = a + b;
 	write(r);
 stop
