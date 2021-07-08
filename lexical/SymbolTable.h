@@ -5,6 +5,7 @@
 #include <string>
 
 #include "TokenType.h"
+#include "Lexeme.h"
 
 class SymbolTable{
 	public:
@@ -12,9 +13,10 @@ class SymbolTable{
 		virtual ~SymbolTable();
 
 		bool contains(std::string token);
-		enum TokenType find(std::string token);
+		Lexeme get(std::string token);
+		bool put(std::string token, enum var_type type);
 	private:
-		std::map<std::string, enum TokenType> m_st;
+		std::map<std::string, Lexeme> m_st;
 };
 
 #endif // SYMBOL_TABLE_H

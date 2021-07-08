@@ -171,7 +171,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				break;
 			// done up to here, needs testing
 			case 10:
-
+				
 				break;
 			case 11:
 
@@ -204,7 +204,7 @@ Lexeme LexicalAnalysis::nextToken(){
 	}
 
 	if(state==19){
-		lex.type=m_st.find(lex.token);
+		lex=m_st.get(lex.token);
 	}
 
 	return lex;
