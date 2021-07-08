@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]){
     if(argc != 2){
-        std::cout << "Usage: " << argv[0] << " [program]" << std::endl;
+        std::cout << "Uso: " << argv[0] << " [programa]" << std::endl;
         exit(1);
     }
     
