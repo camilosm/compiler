@@ -173,5 +173,5 @@ class LexicalAnalysis{
 
 # Agradecimentos:
 
-Doutor @rimsa professor e inspiração.
+Doutor @rimsa, professor e inspiração.
 Esse trabalho foi desenvolvido usando como base a documentação disponível em https://github.com/rimsa/tiny.
