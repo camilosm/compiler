@@ -1,0 +1,22 @@
+class MinhaClasse
+init
+	float a, b, c;
+
+	write("Digite um número");
+	read(a);
+	write("Digite outro número: ");
+	read(b);
+	write("Digite mais um número: ");
+	read(c;
+
+	maior := 0;
+	if ( a>b && a>c )
+	maior = a;
+	else
+	if (b>c)
+	maior = b;
+	else
+	maior = c;
+
+	write("O maior número é: ");
+	write(maior);

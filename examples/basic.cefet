@@ -1,0 +1,9 @@
+class Basic
+	int a,b,r;
+
+init
+	a = 1;
+	b = 1;
+	r = a + b;
+	write(r);
+stop

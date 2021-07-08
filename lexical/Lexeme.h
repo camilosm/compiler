@@ -1,0 +1,24 @@
+#if !defined(LEXEME_H)
+#define LEXEME_H
+
+#include <string>
+#include <sstream>
+
+#include "TokenType.h"
+
+struct Lexeme{
+	std::string token;
+	enum TokenType type;
+
+	Lexeme(): token(""), type(TKN_END_OF_FILE){}
+	virtual ~Lexeme(){}
+
+	const std::string str(){
+		std::stringstream ss;
+
+		ss << "(\"" << token << "\", " << tt2str(type) << ")";
+		return ss.str();
+	}
+};
+
+#endif // LEXEME_H

@@ -1,0 +1,26 @@
+classe Teste3
+/** Verificando fluxo de controle
+Programa com if e while aninhados **/
+int i;
+int media, soma;
+INIT
+	soma = 0;
+
+	write("Quantos dados deseja informar?" );
+	read (qtd);
+	if (qtd>=2){
+	i=0;
+	do{
+	write("Altura: ");
+	read (altura);
+	soma = soma+altura;
+	i = i + 1;
+	}while( i < qtd);
+	media = soma / qtd;
+	write("Media: ");
+	write (media);
+	}
+	else{
+	write("Quantidade inválida.");
+	}
+stop
