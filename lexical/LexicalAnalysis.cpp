@@ -20,10 +20,9 @@ int LexicalAnalysis::line() const {
 }
 
 Lexeme LexicalAnalysis::nextToken(){
-	int state;
 	Lexeme lex;
-
-	state = 1;
+	int state = 1;
+	
 	while (state != 19 && state != 20){
 		int c = fgetc(m_file);
 
@@ -365,7 +364,6 @@ Lexeme LexicalAnalysis::nextToken(){
 	}
 
 	if(state==19){
-		//needs optimization
 		if(!m_st.contains(lex.token))
 			m_st.put(lex.token, lex.data.type);
 		lex=m_st.get(lex.token);
