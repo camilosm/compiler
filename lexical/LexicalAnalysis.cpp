@@ -57,7 +57,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				}
 				else if(c=='\"')
 					state = 17;
-				else if(c==-1){
+				else if(c==EOF){
 					lex.type = TKN_END_OF_FILE;
 					state = 20;
 				}
@@ -76,7 +76,7 @@ Lexeme LexicalAnalysis::nextToken(){
 						state=4;
 					else{
 						lex.token += '/';
-						if(c!=-1)
+						if(c!=EOF)
 							ungetc(c, m_file);
 						state = 19;
 					}
@@ -87,7 +87,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				if(c=='\n'){
 					state = 1;
 				}
-				else if(c==-1){
+				else if(c==EOF){
 					lex.type = TKN_END_OF_FILE;
 					state = 20;
 				}
@@ -98,7 +98,7 @@ Lexeme LexicalAnalysis::nextToken(){
 			case 4:
 				if(c=='*')
 					state = 5;
-				else if(c==-1){
+				else if(c==EOF){
 					lex.type = TKN_END_OF_FILE;
 					state = 20;
 				}
@@ -109,7 +109,7 @@ Lexeme LexicalAnalysis::nextToken(){
 			case 5:
 				if(c=='/')
 					state = 1;
-				else if(c==-1){
+				else if(c==EOF){
 					lex.type = TKN_END_OF_FILE;
 					state = 20;
 				}
@@ -125,7 +125,7 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				else{
-					if(c!=-1)
+					if(c!=EOF)
 						ungetc(c, m_file);
 					state = 19;
 				}
@@ -136,7 +136,7 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				else{
-					if(c!=-1)
+					if(c!=EOF)
 						ungetc(c, m_file);
 					state = 19;
 				}
@@ -148,7 +148,7 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				else{
-					if(c!=-1)
+					if(c!=EOF)
 						ungetc(c, m_file);
 					state = 19;
 				}
@@ -164,38 +164,159 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 10;
 				}
 				else{
-					if(c!=-1)
+					if(c!=EOF)
 						ungetc(c, m_file);
 					state = 19;
 				}
 				break;
-			// done up to here, needs testing
+			
 			case 10:
-				
+				if(c=='_' || isdigit(c) || isalpha(c)){
+					lex.token += (char)c;
+					state = 10;
+				}
+				else{
+					if(c!=EOF)
+						ungetc(c, m_file);
+					lex.type = TKN_VAR;
+					state = 20;
+				}
 				break;
+
 			case 11:
-
+				if(c=='.'){
+					lex.token += (char)c;
+					state = 12;
+				}
+				else{
+					lex.type = TKN_NUMBER_INT;
+					lex.data.int_value = 0;
+					if(c!=EOF)
+						ungetc(c, m_file);
+					state = 20;
+				}
 				break;
+
 			case 12:
-
+				if(isdigit(c)){
+					lex.token += (char)c;
+					state = 13;
+				}
+				else if(c==EOF){
+					lex.type = TKN_UNEXPECTED_EOF;
+					state = 20;
+				}
+				else{
+					lex.type = TKN_INVALID_TOKEN;
+					ungetc(c, m_file);
+					state = 20;
+				}
 				break;
+
 			case 13:
-
+				if(isdigit(c)){
+					lex.token += (char)c;
+					state = 13;
+				}
+				else{
+					if(c!=EOF)
+						ungetc(c, m_file);
+					lex.type = TKN_NUMBER_FLOAT;
+					lex.data.float_value = std::stof(lex.token);
+					state = 20;
+				}
 				break;
+
 			case 14:
-
+				if(isdigit(c)){
+					lex.token += (char)c;
+					state = 14;
+				}
+				else if(c=='.'){
+					lex.token += (char)c;
+					state = 15;
+				}
+				else{
+					if(c!=EOF)
+						ungetc(c, m_file);
+					lex.token += (char)c;
+					lex.type = TKN_NUMBER_INT;
+					lex.data.int_value = std::stoi(lex.token);
+					state = 20;
+				}
 				break;
+
 			case 15:
-
+				if(isdigit(c)){
+					lex.token += (char)c;
+					state = 16;
+				}
+				else if(c==EOF){
+					lex.type = TKN_UNEXPECTED_EOF;
+					state = 20;
+				}
+				else{
+					ungetc(c,m_file);
+					lex.type = TKN_INVALID_TOKEN;
+				}
 				break;
+
 			case 16:
-
+				if(isdigit(c)){
+					lex.token += (char)c;
+					state = 16;
+				}
+				else{
+					if(c!=EOF)
+						ungetc(c,m_file);
+					lex.type = TKN_NUMBER_FLOAT;
+					lex.data.float_value = std::stof(lex.token);
+					state = 20;
+				}
 				break;
+
 			case 17:
-
+				if(c=='\\')
+					state = 18;
+				else if(c=='\"'){
+					lex.type = TKN_LITERAL_STRING;
+					state = 20;
+				}
+				else if(c==EOF){
+					lex.type = TKN_UNEXPECTED_EOF;
+					state = 20;
+				}
+				else{
+					lex.token += (char)c;
+					state = 17;
+				}
 				break;
-			case 18:
 
+			case 18:
+				state = 17;
+				if(c=='b')
+					lex.token += '\b';
+				else if(c=='f')
+					lex.token += '\f';
+				else if(c=='n')
+					lex.token += '\n';
+				else if(c=='r')
+					lex.token += '\r';
+				else if(c=='t')
+					lex.token += '\t';
+				else if(c=='\\')
+					lex.token += '\\';
+				else if(c=='"')
+					lex.token += '\"';
+				else{
+					if(c==EOF)
+						lex.type = TKN_UNEXPECTED_EOF;
+					else{
+						lex.token += '\\'+(char)c;
+						lex.type = TKN_INVALID_TOKEN;
+					}
+					state = 20;
+				}
 				break;
 			default:
 				throw std::string("invalid state");
@@ -204,6 +325,9 @@ Lexeme LexicalAnalysis::nextToken(){
 	}
 
 	if(state==19){
+		//needs optimization
+		if(!m_st.contains(lex.token))
+			m_st.put(lex.token, lex.data.type);
 		lex=m_st.get(lex.token);
 	}
 
