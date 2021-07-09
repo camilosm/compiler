@@ -1,0 +1,1 @@
+class Teste6 int a,b,r;a=1;b=1;c=a+b;write(c);stop
