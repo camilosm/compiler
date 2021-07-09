@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
         Lexeme lex = lexer.nextToken();
         while(lex.type != TKN_END_OF_FILE && lex.type != TKN_UNEXPECTED_EOF){
             if(lex.type==TKN_INVALID_TOKEN)
-                printf("Linha %02d: Lexema inválido [%s]\n", lexer.line(), lex.token.c_str());
+                printf("Linha %02d: Lexema invalido [%s]\n", lexer.line(), lex.token.c_str());
             printf("(\"%s\", %s)\n", lex.token.c_str(), tt2str(lex.type).c_str());
             lex = lexer.nextToken();
         }
