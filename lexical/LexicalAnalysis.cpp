@@ -1,8 +1,4 @@
-#include <iostream>
-
-
 #include <string>
-#include <cctype>
 
 #include "LexicalAnalysis.h"
 
@@ -25,8 +21,6 @@ Lexeme LexicalAnalysis::nextToken(){
 	
 	while (state != 19 && state != 20){
 		int c = fgetc(m_file);
-
-		// std::cout << "[" << state << ", " << c << " ('" << (char) c << "')]" << std::endl;
 
 		if(c=='\n')
 			m_line++;
