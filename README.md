@@ -1,6 +1,6 @@
 # Compilador
 
-Esse projeto contém um compilador para uma linguagem fictícia, criado como um trabalho para a disciplina de Compiladores do curso de Engenharia de Computação do CEFET-MG.
+Esse projeto é um compilador para uma linguagem fictícia, criado como um trabalho para a disciplina de Compiladores do curso de Engenharia de Computação do CEFET-MG.
 
 ## Características da linguagem
 
@@ -303,7 +303,7 @@ lexemas, nessa ordem:
 ("", END_OF_FILE)
 ```
 
-Note que ao final do processo obtém-se o lexema `("", TKN_END_OF_FILE)` que é  um marcador que o analisador léxico processou o arquivo de entrada corretamente e chegou a um fim de arquivo sem erros léxicos.
+Note que ao final do processo obtém-se o lexema `("", TKN_END_OF_FILE)`, que é  um marcador que o analisador léxico processou o arquivo de entrada corretamente e chegou a um fim de arquivo sem erros léxicos.
 
 # Agradecimentos:
 
