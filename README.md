@@ -2,7 +2,7 @@
 
 Esse projeto contém um compilador para uma linguagem fictícia, criado como um trabalho para a disciplina de Compiladores do curso de Engenharia de Computação do CEFET-MG.
 
-## Características da linguagem
+## caractereísticas da linguagem
 
 * As palavras-chave da linguagem são reservadas;
 * Toda variável deve ser declarada antes do seu uso;
@@ -35,11 +35,11 @@ Esse programa lê dois inteiros, e imprime sua soma.
 
 ## Implementação do compilador
 
-A implementação do interpretador pode ser dividida em (N) fases):
+A implementação do interpretador foi dividida em 4 fases:
 [analisador léxico](#analisador-léxico),
 [analisador sintático](#analisador-sintático),
-[gerador de códico](#gerador-de-códico),
-[compilador](#compilador).
+[analisador semântico](#analisador-semântico),
+[gerador de códico](#gerador-de-código).
 Cada uma dessas fases será detalhada a seguir.
 
 ### Analisador léxico
@@ -50,7 +50,7 @@ Note que, nessa linguagem, espaços, novas linhas, tabulações e comentários n
 
 #### Lexema
 
-O lexema é uma estrutura que carrega um *token* e o tipo desse *token*. Opcionalmente, um lexema pode carregar informações adicionais, porém essas não serão utilizadas no escopo da implementação dessa linguagem.
+O lexema é uma estrutura que carrega um *token* e o tipo desse *token*. Opcionalmente, um lexema pode carregar informações adicionais, nessa implementação, ele também carregará o tipo (`int`, `float` ou `string`) de um identificador, e o valor de uma constante numérica.
 
 ```cpp
 struct Lexeme{
@@ -65,7 +65,8 @@ struct Lexeme{
 ```
 
 O lexema possui seus membros públicos para facilitar sua utilização pelo analisador léxico.
-O *token* é uma string com o elemento formado, e *type* é o tipo do *token*.
+O campo *token* é uma string com o elemento formado, e o campo *type* é o tipo do *token*.
+O campo *data* é usado para guardar o tipo caso seja um identificador, e o valor caso seja um numeral.
 Os tipos possíveis são listados pela enumeração *TokenType* que inclui símbolos da linguagem (ex.: **+**, **;**, ...), palavras-reservadas (ex.: **if**, **while**, ...), além de alguns tipos especiais (ex.: *token* inválido, constante númerica, ...).
 
 ```cpp
@@ -135,8 +136,9 @@ Para o programa de exemplo, os lexemas obtidos podem ser vistos na seção de [r
 
 #### Tabela de Símbolos
 
-A tabela de símbolos (`SymbolTable`) é uma estrutura auxiliar utilizada para facilitar o casamento de um *token* com seu tipo.
+A tabela de símbolos (`SymbolTable`) é uma estrutura auxiliar utilizada para facilitar o casamento de um *token* com seu tipo e armazenar **Lexemas** identificadores declarados.
 A tabela de símbolos é um dicionário que mapeia uma chave (**token**) com seu valor (**TokenType**).
+Na implementação, o valor de um **token** na tabela é na verdade um **Lexema** que armazena o **TokenType**.
 Essa tabela é pré-populada para todas as palavras-reservadas e símbolos da linguagem.
 
 | *Token* | *TokenType*  |
@@ -147,28 +149,25 @@ Essa tabela é pré-populada para todas as palavras-reservadas e símbolos da li
 | "<"     | TKN_LOWER    |
 | ...     | ...          |
 
-Note que não é possível preencher essa tabela com todos os números existentes, nem com todos os possíveis identificadores que possam vir a ser criados por um programa.
-Também não deve ser preenchida com os três tipos especiais (`TKN_UNEXPECTED_EOF`, `TKN_INVALID_TOKEN`, `TKN_END_OF_FILE`).
-Como a linguagem possui escopo global, uma vez populada essa tabela não será modificada.
-Além disso, qualquer consulta a esse mapa cujo *token* não seja encontrado deve retornar o tipo identificador (`TKN_VAR`).
+Note que não é possível preencher essa tabela com todos os números existentes, nem com todos os possíveis identificadores que possam vir a ser criados por um programa. Logo, a tabela vai sendo incrementada com os identificadores lidos ao longo da análise.
+Também não é populada com os três tipos especiais (`TKN_UNEXPECTED_EOF`, `TKN_INVALID_TOKEN`, `TKN_END_OF_FILE`).
 
 #### Autômato Finito Determinístico
 
-Existem várias estratégias para formação de lexemas.
-Na implementação desse interpretador será utilizado um autômato finito determinístico, também conhecido como máquina de estados, conforme diagrama a seguir.
+Existem várias estratégias para formação de lexemas, na implementação desse interpretador será utilizado um autômato finito determinístico, também conhecido como máquina de estados, conforme diagrama a seguir.
 
 ![AFD](images/lexical.png)
 
 O autômato possui estados (nomeados de 1 a 20) e arestas (rotuladas com símbolos, caracteres do programa).
 Existe um único estado inicial - estado 1 - representado pelo estado com uma aresta entrante sem origem, e dois estados finais - estados 19 e 20 - representados pelo círculo duplo.
-A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caracter do programa (*'s'*):
+A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caractere do programa (*'s'*):
 *T(e<sub>x</sub>, 's') = e<sub>y</sub>*.
 O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.
-Isso é feito pois para encerrar o reconhecimento de alguns lexemas, é necessário ler o próximo símbolo para que seja confirmado. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.
+Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.
 O analisador léxico implementa esse autômato.
 
 O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.
-Deve ser possível *devolver* um caracter para o buffer de leitura.
+Deve ser possível *devolver* um caractere para o buffer de leitura.
 É usado o descritor `FILE\*` com a função `ungetc` nativa.
 Assim, o analisador léxico deve manter:
 * um apontador para o número da linha atual (`int m_line;`);
@@ -228,10 +227,10 @@ Lexeme LexicalAnalysis::nextToken(){
 ```
 
 O lexema é inicializado vazio, e o autômato é iniciado no estado 1 (`int state = 1;`).
-Enquanto não se atinge os estados finais 19 ou 20 (`while (state != 19 && state != 20){`), lê-se um caracter da entrada (`int c = getc();`).
-Esse caracter pode ser ou não usado na formação do *token*.
-Note que o caracter lido é do tipo inteiro (`int`), já que o fim do arquivo é denotado pelo inteiro `-1`.
-Esse inteiro é convertido de volta para caracter ao ser concatenado ao *token*.
+Enquanto não se atinge um dos estados finais 19 ou 20 (`while (state != 19 && state != 20){`), lê-se um caractere da entrada (`int c = getc();`).
+Esse caractere pode ser ou não usado na formação do *token*.
+Note que o caractere lido é do tipo inteiro (`int`), já que o fim do arquivo é denotado pelo inteiro `-1`.
+Esse inteiro é convertido de volta para caractere ao ser concatenado ao *token*.
 Os caminhos que levam ao estado 20 devem anotar explicitamente o tipo do *token* formado, enquanto os caminhos que leval ao estado 19 devem consultar a tabela de símbolos (`lex = m_st.get(lex.token);`).
 A implementação de cada transição depende do estado em que a máquina se encontra.
 
@@ -255,7 +254,7 @@ A implementação do estado 7 é dada conforme código acima.
 Ao ler o símbolo *'&'* (`if(c=='&'){`), ele é incluí-do no *token* (`lex.token += (char)c;`) e a máquina vai para o estado 19 (`state = 19;`).
 Note que o diagrama não explicita as transições de erro, mas elas são consideradas na implementação.
 Se o programa lê o símbolo *'&'* e chega ao fim do arquivo antes de ler o símbolo *'&'* para a formação do *token* **&&**, é anotado um fim de arquivo inesperado `lex.type = TKN_UNEXPECTED_EOF;` e a máquina vai para o estado 20 (`state = 20;`).
-Se o programa lê um caracter qualquer depois do *'&'* que não um *'&'*, é anotado que foi formado um *token* inválido (`lex.type = TKN_INVALID_TOKEN;` e a máquina vai para o estado 20 (`state = 20;`).
+Se o programa lê um caractere qualquer depois do *'&'* que não um *'&'*, é anotado que foi formado um *token* inválido (`lex.type = TKN_INVALID_TOKEN;` e a máquina vai para o estado 20 (`state = 20;`).
 Toda transição para o estado 20 tem seu tipo de token explícitamente definido.
 
 Para detalhes da implementação dos outros estados, favor consultar o analisador
