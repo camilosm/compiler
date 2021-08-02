@@ -1,6 +1,6 @@
 class Teste2
 /* Teste de comentário
-com mais de uma linha
+com mais de uma linha*/
 a, 9valor, b_1, b_2 : int;
 
 init
