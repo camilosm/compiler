@@ -106,7 +106,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				if(c=='*')
 					state = 5;
 				else if(c==EOF){
-					lex.type = TKN_END_OF_FILE;
+					lex.type = TKN_UNEXPECTED_EOF;
 					state = 20;
 				}
 				else
@@ -117,7 +117,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				if(c=='/')
 					state = 1;
 				else if(c==EOF){
-					lex.type = TKN_END_OF_FILE;
+					lex.type = TKN_UNEXPECTED_EOF;
 					state = 20;
 				}
 				else if(c=='*')
