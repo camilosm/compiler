@@ -33,47 +33,6 @@ stop
 ```
 Esse programa lê dois inteiros, e imprime sua soma.
 
-## Gramática da linguagem
-
-A gramática da linguagem miniRuby é dada a seguir no formato de BackusNaur estendida (EBNF):
-```
-program ::= class identifier [decl-list] body
-decl-list ::= decl ";" { decl ";"}
-decl ::= type ident-list
-ident-list ::= identifier {"," identifier}
-type ::= int | string | float
-body ::= init stmt-list stop
-stmt-list ::= stmt ";" { stmt ";" }
-stmt ::= assign-stmt | if-stmt | do-stmt | read-stmt | write-stmt
-assign-stmt ::= identifier "=" simple_expr
-if-stmt ::= if "(" condition ")" "{" stmt-list "}" | if "(" condition ")" "{" stmt-list "}" else "{" stmt-list "}"
-condition ::= expression
-do-stmt ::= do "{" stmt-list "}" do-suffix
-do-suffix ::= while "(" condition ")"
-read-stmt ::= read "(" identifier ")"
-write-stmt ::= write "(" writable ")"
-writable ::= simple-expr
-expression ::= simple-expr | simple-expr relop simple-expr
-simple-expr ::= term | simple-expr addop term
-term ::= factor-a | term mulop factor-a
-factor-a ::= factor | "!" factor | "-" factor
-factor ::= identifier | constant | "(" expression ")"
-relop ::= ">" | ">=" | "<" | "<=" | "!=" | "=="
-addop ::= "+" | "-" | "||"
-mulop ::= "*" | "/" | "&&"
-
-constant ::= integer_const | literal | real_const
-integer_const ::= nonzero digit* | 0
-real_const ::= interger_const "." digit+
-literal ::= " " " caractere* " " "
-identifier ::= letter {letter | digit | " _ " }
-letter ::= [A-Za-z]
-digit ::= [0-9]
-nonzero ::= [1-9]
-caractere ::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
-
-```
-
 ## Implementação do compilador
 
 A implementação do compilador foi dividida em 4 fases:
@@ -83,13 +42,13 @@ A implementação do compilador foi dividida em 4 fases:
 [gerador de códico](#gerador-de-código).
 Cada uma dessas fases será detalhada a seguir.
 
-### Analisador léxico
+## Analisador léxico
 
 O analisador léxico é responsável por separar os *tokens* da linguagem.
 *Tokens* são os menores elementos que podem ser formados por um programa.
 Note que, nessa linguagem, espaços, novas linhas, tabulações e comentários não são elementos léxicos, ou seja, não formam *tokens*.
 
-#### Lexema
+### Lexema
 
 O lexema é uma estrutura que carrega um *token* e o tipo desse *token*. Opcionalmente, um lexema pode carregar informações adicionais, nessa implementação, ele também carregará o tipo (`int`, `float` ou `string`) de um identificador, e o valor de uma constante numérica.
 
@@ -175,7 +134,7 @@ Já os últimos tipos são usados para representar os tipos:
 Todos os outros são designados para palavras-reservadas ou símbolos da linguagem.
 Para o programa de exemplo, os lexemas obtidos podem ser vistos na seção de [resultado](#resultado).
 
-#### Tabela de Símbolos
+### Tabela de Símbolos
 
 A tabela de símbolos (`SymbolTable`) é uma estrutura auxiliar utilizada para facilitar o casamento de um *token* com seu tipo e armazenar **Lexemas** identificadores declarados.
 A tabela de símbolos é um dicionário que mapeia uma chave (**token**) com seu valor (**TokenType**).
@@ -193,7 +152,7 @@ Essa tabela é pré-populada para todas as palavras-reservadas e símbolos da li
 Note que não é possível preencher essa tabela com todos os números existentes, nem com todos os possíveis identificadores que possam vir a ser criados por um programa. Logo, a tabela vai sendo incrementada com os identificadores lidos ao longo da análise.
 Também não é populada com os três tipos especiais (`TKN_UNEXPECTED_EOF`, `TKN_INVALID_TOKEN`, `TKN_END_OF_FILE`).
 
-#### Autômato Finito Determinístico
+### Autômato Finito Determinístico
 
 Existem várias estratégias para formação de lexemas, na implementação desse interpretador será utilizado um autômato finito determinístico, também conhecido como máquina de estados, conforme diagrama a seguir.
 
@@ -301,7 +260,7 @@ Toda transição para o estado 20 tem seu tipo de token explícitamente definido
 Para detalhes da implementação dos outros estados, favor consultar o analisador
 léxico disponível no código do repositório.
 
-#### Resultado
+### Resultado
 
 O resultado obtido pelo analisador léxico é a sequência de lexemas produzidos
 pelo programa de entrada. Para o programa de exemplo, obtêm-se os seguintes
@@ -343,7 +302,54 @@ lexemas, nessa ordem:
 ("", END_OF_FILE)
 ```
 
-Note que ao final do processo obtém-se o lexema `("", TKN_END_OF_FILE)`, que é  um marcador que o analisador léxico processou o arquivo de entrada corretamente e chegou a um fim de arquivo sem erros léxicos.
+Note que ao final do processo obtém-se o lexema `("", END_OF_FILE)`, que é  um marcador que o analisador léxico processou o arquivo de entrada corretamente e chegou a um fim de arquivo sem erros léxicos.
+
+## Analisador sintático
+
+O analisador sintático é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.
+Para isso, é definida uma gramática com regras de como os tokens são organizados na linguagem.
+
+### Gramática
+
+A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extended Backus-Naur Form).
+
+```
+<program> 		::= class <identifier> [ <decl_list> ] <body>
+<decl_list> 	::= <decl> ';' { <decl> ';' }
+<decl> 			::= <type> <ident_list>
+<ident_list> 	::= <identifier> { ',' <identifier> }
+<type> 			::= int | string | float
+<body> 			::= init <stmt_list> stop
+<stmt_list> 	::= <stmt> ';' { <stmt> ';' }
+<stmt> 			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
+<assign_stmt> 	::= <identifier> '=' <simple_expr>
+<if_stmt> 		::= if '(' condition ')' '{' stmt_list '}' | if '(' condition ')' '{' stmt_list '}' else '{' stmt_list '}'
+<condition> 	::= <expression>
+<do_stmt>		::= do '{' stmt_list '}' <do_suffix>
+<do_suffix>		::= while '(' condition ')'
+<read_stmt>		::= read '(' identifier ')'
+<write_stmt>	::= write '(' writable ')'
+<writable>		::= <simple_expr>
+<expression>	::= <simple_expr> | <simple_expr> <relop> <simple_expr>
+<simple_expr>	::= <term> | <simple_expr> <addop> <term>
+<term>			::= <factor_a> | <term> <mulop> <factor_a>
+<factor_a>		::= <factor> | '!' <factor> | '_' <factor>
+<factor>		::= <identifier> | <constant> | '(' <expression> ')'
+<relop>			::= '>' | '>=' | '<' | '<=' | '!=' | '=='
+<addop>			::= '+' | '_' | '||'
+<mulop>			::= '*' | '/' | '&&'
+
+<constant>		::= <integer_const> | <literal> | <real_const>
+<integer_const>	::= <nonzero> { <digit> } | 0
+<real_const>	::= <interger_const> '.' <digit> { <digit> }
+<literal>		::= '"' { <caractere> } '"'
+<identifier>	::= <letter> { <letter> | <digit> | '_' }
+<letter>		::= [A_Za-z]
+<digit>			::= [0-9]
+<nonzero>		::= [1-9]
+<caractere>		::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
+
+```
 
 # Agradecimentos:
 
