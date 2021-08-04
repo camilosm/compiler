@@ -141,13 +141,13 @@ A tabela de símbolos é um dicionário que mapeia uma chave (**token**) com seu
 Na implementação, o valor de um **token** na tabela é na verdade um **Lexema** que armazena o **TokenType**.
 Essa tabela é pré-populada para todas as palavras-reservadas e símbolos da linguagem.
 
-| *Token* | *TokenType*  |
-| ------- | -----------  |
-| "="     | TKN_ASSIGN   |
-| "=="    | TKN_EQUAL    |
-| "!="    | TKN_NOT_EQUAL|
-| "<"     | TKN_LOWER    |
-| ...     | ...          |
+|	*Token*	|	*TokenType*		|
+|	-		|	-				|
+|	"="		|	TKN_ASSIGN		|
+|	"=="	|	TKN_EQUAL		|
+|	"!="	|	TKN_NOT_EQUAL	|
+|	"<" 	|	TKN_LOWER		|
+|	... 	|	...				|
 
 Note que não é possível preencher essa tabela com todos os números existentes, nem com todos os possíveis identificadores que possam vir a ser criados por um programa. Logo, a tabela vai sendo incrementada com os identificadores lidos ao longo da análise.
 Também não é populada com os três tipos especiais (`TKN_UNEXPECTED_EOF`, `TKN_INVALID_TOKEN`, `TKN_END_OF_FILE`).
@@ -306,39 +306,45 @@ Note que ao final do processo obtém-se o lexema `("", END_OF_FILE)`, que é  um
 
 ## Analisador sintático
 
-O analisador sintático é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.
-Para isso, é definida uma gramática com regras de como os tokens são organizados na linguagem.
+O analisador sintático é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
+Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**.  
+Esse tipo de analisador sintático só funciona se a gramática for **LL(1)**.
 
-### Gramática
+### Gramática proposta
 
-A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extended Backus-Naur Form).
+A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extended Backus-Naur Form).  
+Para facilitar a leitura, produções estão entre `< >`.
 
 ```
-<program> 		::= class <identifier> [ <decl_list> ] <body>
+<program> 		::= class identifier [ <decl_list> ] <body>
 <decl_list> 	::= <decl> ';' { <decl> ';' }
 <decl> 			::= <type> <ident_list>
-<ident_list> 	::= <identifier> { ',' <identifier> }
+<ident_list> 	::= identifier { ',' identifier }
 <type> 			::= int | string | float
 <body> 			::= init <stmt_list> stop
 <stmt_list> 	::= <stmt> ';' { <stmt> ';' }
 <stmt> 			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
-<assign_stmt> 	::= <identifier> '=' <simple_expr>
-<if_stmt> 		::= if '(' condition ')' '{' stmt_list '}' | if '(' condition ')' '{' stmt_list '}' else '{' stmt_list '}'
-<condition> 	::= <expression>
-<do_stmt>		::= do '{' stmt_list '}' <do_suffix>
-<do_suffix>		::= while '(' condition ')'
+<assign_stmt> 	::= identifier '=' <simple_expr>
+<if_stmt> 		::= if '(' <condition> ')' '{' <stmt_list> '}' | if '(' <condition> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
+<condition> 	::= <expression>//removida
+<do_stmt>		::= do '{' <stmt_list> '}' <do_suffix>
+<do_suffix>		::= while '(' <condition> ')'
 <read_stmt>		::= read '(' identifier ')'
-<write_stmt>	::= write '(' writable ')'
-<writable>		::= <simple_expr>
+<write_stmt>	::= write '(' <writable> ')'
+<writable>		::= <simple_expr>//removida
 <expression>	::= <simple_expr> | <simple_expr> <relop> <simple_expr>
 <simple_expr>	::= <term> | <simple_expr> <addop> <term>
 <term>			::= <factor_a> | <term> <mulop> <factor_a>
-<factor_a>		::= <factor> | '!' <factor> | '_' <factor>
-<factor>		::= <identifier> | <constant> | '(' <expression> ')'
+<factor_a>		::= <factor> | '!' <factor> | '-' <factor>
+<factor>		::= identifier | constant | '(' <expression> ')'
 <relop>			::= '>' | '>=' | '<' | '<=' | '!=' | '=='
-<addop>			::= '+' | '_' | '||'
+<addop>			::= '+' | '-' | '||'
 <mulop>			::= '*' | '/' | '&&'
+```
 
+### Padrão de formação dos tokens
+
+```
 <constant>		::= <integer_const> | <literal> | <real_const>
 <integer_const>	::= <nonzero> { <digit> } | 0
 <real_const>	::= <interger_const> '.' <digit> { <digit> }
@@ -350,6 +356,69 @@ A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extende
 <caractere>		::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
 
 ```
+Para facilitar a análise da gramática, primeiro ela será simplificada, removendo regras unitárias.  
+Com isso, temos a seguinte gramática:
+
+```
+<program> 		::= class identifier [ <decl_list> ] <body>
+<decl_list> 	::= <decl> ';' { <decl> ';' }
+<decl> 			::= <type> <ident_list>
+<ident_list> 	::= identifier { ',' identifier }
+<type> 			::= int | string | float
+<body> 			::= init <stmt_list> stop
+<stmt_list> 	::= <stmt> ';' { <stmt> ';' }
+<stmt> 			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
+<assign_stmt> 	::= identifier '=' <simple_expr>
+<if_stmt> 		::= if '(' <expression> ')' '{' <stmt_list> '}' | if '(' <expression> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
+<do_stmt>		::= do '{' <stmt_list> '}' <do_suffix>
+<do_suffix>		::= while '(' <expression> ')'
+<read_stmt>		::= read '(' identifier ')'
+<write_stmt>	::= write '(' <simple_expr> ')'
+<expression>	::= <simple_expr> | <simple_expr> <relop> <simple_expr>
+<simple_expr>	::= <term> | <simple_expr> <addop> <term>
+<term>			::= <factor_a> | <term> <mulop> <factor_a>
+<factor_a>		::= <factor> | '!' <factor> | '-' <factor>
+<factor>		::= identifier | constant | '(' <expression> ')'
+<relop>			::= '>' | '>=' | '<' | '<=' | '!=' | '=='
+<addop>			::= '+' | '-' | '||'
+<mulop>			::= '*' | '/' | '&&'
+```
+
+As regras para de formação de **tokens** continuam as mesmas.
+Agora, para verificar se a gramática é **LL(1)**, vamos calcular os conjuntos ***FIRST*** e ***FOLLOW***.
+
+#### FIRST
+
+| Produção        | First                           |
+|-----------------|---------------------------------|
+| \<program\>     | class                           |
+| \<decl_list\>   | int, string, float              |
+| \<decl\>        | int, string, float              |
+| \<ident_list\>  | identifier                      |
+| \<type\>        | int, string, float              |
+| \<body\>        | init                            |
+| \<stmt_list\>   | identifier, if, do, read, write |
+| \<stmt\>        | identifier, if, do, read, write |
+| \<assign_stmt\> | identifier                      |
+| \<if_stmt\>     | if                              |
+| \<do_stmt\>     | do                              |
+| \<do_suffix\>   | while                           |
+| \<read_stmt\>   | read                            |
+| \<write_stmt\>  | write                           |
+| \<expression\>  | identifier, constant, (, !, -   |
+| \<simple_expr\> | identifier, constant, (, !, -   |
+| \<term\>        | identifier, constant, (, !, -   |
+| \<factor_a\>    | identifier, constant, (, !, -   |
+| \<factor\>      | identifier, constant, (         |
+| \<relop\>       | >, >=, <, <=, !=, ==            |
+| \<addop\>       | +, -, \|\|                      |
+| \<mulop\>       | *, /, &&                        |
+
+
+
+
+#### FOLLOW
+
 
 # Agradecimentos:
 
