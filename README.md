@@ -31,6 +31,7 @@ init
 	write(r);
 stop
 ```
+
 Esse programa lê dois inteiros, e imprime sua soma.
 
 ## Implementação do compilador
@@ -158,17 +159,17 @@ Existem várias estratégias para formação de lexemas, na implementação dess
 
 ![AFD](images/lexical.png)
 
-O autômato possui estados (nomeados de 1 a 20) e arestas (rotuladas com símbolos, caracteres do programa).
-Existe um único estado inicial - estado 1 - representado pelo estado com uma aresta entrante sem origem, e dois estados finais - estados 19 e 20 - representados pelo círculo duplo.
-A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caractere do programa (*'s'*):
-*T(e<sub>x</sub>, 's') = e<sub>y</sub>*.
-O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.
-Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.
-O analisador léxico implementa esse autômato.
+O autômato possui estados (nomeados de 1 a 20) e arestas (rotuladas com símbolos, caracteres do programa).  
+Existe um único estado inicial - estado 1 - representado pelo estado com uma aresta entrante sem origem, e dois estados finais - estados 19 e 20 - representados pelo círculo duplo.  
+A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caractere do programa (*'s'*):  
+*T(e<sub>x</sub>, 's') = e<sub>y</sub>*
+O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.  
+Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.  
+O analisador léxico implementa esse autômato.  
 
-O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.
-Deve ser possível *devolver* um caractere para o buffer de leitura.
-É usado o descritor `FILE\*` com a função `ungetc` nativa.
+O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.  
+Deve ser possível *devolver* um caractere para o buffer de leitura.  
+É usado o descritor `FILE\*` com a função `ungetc` nativa.  
 Assim, o analisador léxico deve manter:
 * um apontador para o número da linha atual (`int m_line;`);
 * uma instância com a tabela de símbolos (`SymbolTable m_st;`);
@@ -354,7 +355,6 @@ Para facilitar a leitura, produções estão entre `< >`.
 <digit>			::= [0-9]
 <nonzero>		::= [1-9]
 <caractere>		::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
-
 ```
 
 É imediato que a gramática não é **LL(1)** pois possui recursão à esquerda e prefixos comuns.  
