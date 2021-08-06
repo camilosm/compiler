@@ -2,6 +2,7 @@
 #include <cstdlib>
 
 #include "lexical/LexicalAnalysis.h"
+#include "syntatic/SyntaticAnalysis.h"
 
 int main(int argc, char* argv[]){
     if(argc != 2){
@@ -10,22 +11,11 @@ int main(int argc, char* argv[]){
     }
     
     try{
-        LexicalAnalysis lexer(argv[1]);
-
-        // O código a seguir é usado apenas para testar o analisador léxico.
-        // TODO: depois de pronto, comentar o código abaixo.
-        Lexeme lex = lexer.nextToken();
-        while(lex.type != TKN_END_OF_FILE && lex.type != TKN_UNEXPECTED_EOF){
-            if(lex.type==TKN_INVALID_TOKEN)
-                printf("Linha %02d: Lexema invalido [%s]\n", lexer.line(), lex.token.c_str());
-            printf("(\"%s\", %s)\n", lex.token.c_str(), tt2str(lex.type).c_str());
-            lex = lexer.nextToken();
-        }
-        printf("(\"%s\", %s)\n", lex.token.c_str(), tt2str(lex.type).c_str());
-        if(lex.type==TKN_UNEXPECTED_EOF)
-            printf("Linha %02d: Fim de arquivo inesperado\n", lexer.line());
-        printf("Linhas: %d\n", lexer.line());
-        // Comentar até aqui
+        Lexeme lex;
+        LexicalAnalysis lexical(argv[1]);
+        SyntaticAnalysis syntatic(lexical);
+        
+        syntatic.start();
     }
     catch(const std::string& error){
         std::cerr << error << std::endl;
