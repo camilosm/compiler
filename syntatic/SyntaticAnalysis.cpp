@@ -38,17 +38,17 @@ int SyntaticAnalysis::checkToken(int qt_tokens, ...) {
 }
 
 void SyntaticAnalysis::showError() {
-	printf("%02d: ", m_lex.line());
+	printf("Linha%02d: ", m_lex.line());
 	switch (m_current.type) {
 		case TKN_INVALID_TOKEN:
-			printf("Lexema inválido [%s]\n", m_current.token.c_str());
+			std::cout << "Lexema inválido [" << m_current.token << "]" << std::endl;
 			break;
 		case TKN_UNEXPECTED_EOF:
 		case TKN_END_OF_FILE:
-			printf("Fim de arquivo inesperado\n");
+			std::cout << "Fim de arquivo inesperado!" << std::endl;
 			break;
 		default:
-			printf("Lexema não esperado [%s]\n", m_current.token.c_str());
+			std::cout << "Lexema não esperado [" << m_current.token << "]" << std::endl;
 			break;
 	}
 	exit(1);
@@ -75,7 +75,7 @@ void SyntaticAnalysis::proc_program(){
 void SyntaticAnalysis::proc_decl_list(){
 	proc_decl();
 	matchToken(TKN_SEMICOLON);
-	while(m_current.type==TKN_INT || m_current.type==TKN_FLOAT || m_current.type==TKN_STRING){
+	while(checkToken(3, TKN_INT, TKN_FLOAT, TKN_STRING)){
 		proc_decl();
 		matchToken(TKN_SEMICOLON);
 	}
@@ -273,6 +273,7 @@ void SyntaticAnalysis::proc_factor(){
 			matchToken(TKN_OPEN_PAR);
 			proc_expression();
 			matchToken(TKN_CLOSE_PAR);
+			break;
 		default:
 			showError();
 			break;
