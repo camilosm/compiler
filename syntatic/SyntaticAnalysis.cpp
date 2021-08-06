@@ -1,4 +1,5 @@
 #include <cstdarg>
+#include <iostream>
 
 #include "SyntaticAnalysis.h"
 
@@ -15,7 +16,7 @@ void SyntaticAnalysis::start(){
 }
 
 void SyntaticAnalysis::matchToken(enum TokenType type) {
-	// printf("Match token: %d -> %d (\"%s\")\n", m_current.type, type, m_current.token.c_str());
+	std::cout << "Expected: " << tt2str(type) << ", found: " << tt2str(m_current.type) << "(\"" << m_current.token << "\")" << std::endl;
 	if(type == m_current.type)
 		m_current = m_lex.nextToken();
 	else
