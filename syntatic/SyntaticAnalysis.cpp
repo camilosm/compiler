@@ -10,7 +10,8 @@ SyntaticAnalysis::~SyntaticAnalysis(){
 }
 
 void SyntaticAnalysis::start(){
-
+	proc_program();
+	matchToken(TKN_END_OF_FILE);
 }
 
 void SyntaticAnalysis::matchToken(enum TokenType type) {
