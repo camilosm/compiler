@@ -58,92 +58,91 @@ inline std::string tt2str(enum TokenType type){
 	switch(type){
 		// SPECIALS
 		case TKN_UNEXPECTED_EOF:
-			return "UNEXPECTED_EOF";
+			return "TKN_UNEXPECTED_EOF";
 		case TKN_INVALID_TOKEN:
-			return "INVALID_TOKEN";
+			return "TKN_INVALID_TOKEN";
 		case TKN_END_OF_FILE:
-			return "END_OF_FILE";
+			return "TKN_END_OF_FILE";
 
 		// SYMBOLS
 		case TKN_OPEN_PAR:
-			return "OPEN_PAR";
+			return "TKN_OPEN_PAR";
 		case TKN_CLOSE_PAR:
-			return "CLOSE_PAR";
+			return "TKN_CLOSE_PAR";
 		case TKN_OPEN_CUR:
-			return "OPEN_CUR";
+			return "TKN_OPEN_CUR";
 		case TKN_CLOSE_CUR:
-			return "CLOSE_CUR";
+			return "TKN_CLOSE_CUR";
 		case TKN_COMMA:
-			return "COMMA";
+			return "TKN_COMMA";
 		case TKN_SEMICOLON:
-			return "SEMICOLON";
+			return "TKN_SEMICOLON";
 		
 		// OPERATORS
 		case TKN_ASSIGN:
-			return "ASSIGN";
+			return "TKN_ASSIGN";
 		case TKN_NOT:
-			return "NOT";
+			return "TKN_NOT";
 		case TKN_EQUAL:
-			return "EQUAL";
+			return "TKN_EQUAL";
 		case TKN_NOT_EQUAL:
-			return "NOT_EQUAL";
+			return "TKN_NOT_EQUAL";
 		case TKN_LOWER:
-			return "LOWER";
+			return "TKN_LOWER";
 		case TKN_GREATER:
-			return "GREATER";
+			return "TKN_GREATER";
 		case TKN_LOWER_EQ:
-			return "LOWER_EQ";
+			return "TKN_LOWER_EQ";
 		case TKN_GREATER_EQ:
-			return "GREATER_EQ";
+			return "TKN_GREATER_EQ";
 		case TKN_ADD:
-			return "ADD";
+			return "TKN_ADD";
 		case TKN_SUB:
-			return "SUB";
+			return "TKN_SUB";
 		case TKN_MUL:
-			return "MUL";
+			return "TKN_MUL";
 		case TKN_DIV:
-			return "DIV";
+			return "TKN_DIV";
 		case TKN_OR:
-			return "OR";
+			return "TKN_OR";
 		case TKN_AND:
-			return "AND";
+			return "TKN_AND";
 		
 		// KEYWORDS
 		case TKN_IF:
-			return "IF";
+			return "TKN_IF";
 		case TKN_ELSE:
-			return "ELSE";
+			return "TKN_ELSE";
 		case TKN_DO:
-			return "DO";
+			return "TKN_DO";
 		case TKN_WHILE:
-			return "WHILE";
+			return "TKN_WHILE";
 		case TKN_READ:
-			return "READ";
+			return "TKN_READ";
 		case TKN_WRITE:
-			return	"WRITE";
+			return "TKN_WRITE";
 		case TKN_CLASS:
-			return	"CLASS";
+			return "TKN_CLASS";
 		case TKN_INT:
-			return	"INT";
+			return "TKN_INT";
 		case TKN_FLOAT:
-			return	"FLOAT";
+			return "TKN_FLOAT";
 		case TKN_STRING:
-			return	"STRING";
+			return "TKN_STRING";
 		case TKN_INIT:
-			return	"INIT";
+			return "TKN_INIT";
 		case TKN_STOP:
-			return	"STOP";
+			return "TKN_STOP";
 
 		// OTHERS
-		
 		case TKN_NUMBER_INT:
-			return "NUMBER_INT";
+			return "TKN_NUMBER_INT";
 		case TKN_NUMBER_FLOAT:
-			return "NUMBER_FLOAT";
+			return "TKN_NUMBER_FLOAT";
 		case TKN_LITERAL_STRING:
-			return "LITERAL_STRING";
+			return "TKN_LITERAL_STRING";
 		case TKN_ID:
-			return "IDENTIFIER";
+			return "TKN_IDENTIFIER";
 
 		default:
 			throw std::string("invalid token type");
