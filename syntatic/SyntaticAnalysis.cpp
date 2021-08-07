@@ -15,15 +15,15 @@ void SyntaticAnalysis::start(){
 	matchToken(TKN_END_OF_FILE);
 }
 
-void SyntaticAnalysis::matchToken(enum TokenType type) {
-	std::cout << "Expected: " << tt2str(type) << ", found: " << tt2str(m_current.type) << "(\"" << m_current.token << "\")" << std::endl;
+void SyntaticAnalysis::matchToken(enum TokenType type){
+	// std::cout << "Expected: " << tt2str(type) << ", found: " << tt2str(m_current.type) << "(\"" << m_current.token << "\")" << std::endl;
 	if(type == m_current.type)
 		m_current = m_lex.nextToken();
 	else
-		showError();
+		showError(1, type);
 }
 
-int SyntaticAnalysis::checkToken(int qt_tokens, ...) {
+int SyntaticAnalysis::checkToken(int qt_tokens, ...){
 	va_list valist_tokens;
 	enum TokenType type;
 	va_start(valist_tokens, qt_tokens);
@@ -37,21 +37,32 @@ int SyntaticAnalysis::checkToken(int qt_tokens, ...) {
 	return 0;
 }
 
-void SyntaticAnalysis::showError() {
-	printf("Linha%02d: ", m_lex.line());
-	switch (m_current.type) {
+void SyntaticAnalysis::showError(int qt_tokens, ...){
+	printf("Line %02d: expected one of: [", m_lex.line());
+	va_list valist_tokens;
+	enum TokenType type;
+	va_start(valist_tokens, qt_tokens);
+	type = (enum TokenType)va_arg(valist_tokens, int);
+	std::cout << tt2str(type);
+	for(int i = 1; i<qt_tokens; i++){
+		type = (enum TokenType)va_arg(valist_tokens, int);
+		std::cout << ", " << tt2str(type);
+	}
+	std::cout << "], found: ";
+	switch (m_current.type){
 		case TKN_INVALID_TOKEN:
-			std::cout << "Lexema inválido [" << m_current.token << "]" << std::endl;
+			std::cout << "invalid token [" << m_current.token << "]" << std::endl;
 			break;
 		case TKN_UNEXPECTED_EOF:
 		case TKN_END_OF_FILE:
-			std::cout << "Fim de arquivo inesperado!" << std::endl;
+			std::cout << "unexpected end of file!" << std::endl;
+			exit(1);
 			break;
 		default:
-			std::cout << "Lexema não esperado [" << m_current.token << "]" << std::endl;
+			std::cout << "unexpected token [(\"" << m_current.token << "\", "<< tt2str(m_current.type) << ")]" << std::endl;
 			break;
 	}
-	exit(1);
+	m_current = m_lex.nextToken();
 }
 
 
@@ -100,7 +111,7 @@ void SyntaticAnalysis::proc_type(){
 			matchToken(TKN_STRING);
 			break;
 		default:
-			showError();
+			showError(3, TKN_INT, TKN_FLOAT, TKN_STRING);
 			break;
 	}
 }
@@ -150,7 +161,7 @@ void SyntaticAnalysis::proc_stmt(){
 			proc_write_stmt();
 			break;
 		default:
-			showError();
+			showError(5, TKN_ID, TKN_IF, TKN_DO, TKN_READ, TKN_WRITE);
 			break;
 	}
 }
@@ -275,7 +286,7 @@ void SyntaticAnalysis::proc_factor(){
 			matchToken(TKN_CLOSE_PAR);
 			break;
 		default:
-			showError();
+			showError(5, TKN_ID, TKN_NUMBER_INT, TKN_NUMBER_FLOAT, TKN_LITERAL_STRING, TKN_OPEN_PAR);
 			break;
 	}
 }
@@ -302,7 +313,7 @@ void SyntaticAnalysis::proc_relop(){
 			matchToken(TKN_EQUAL);
 			break;
 		default:
-			showError();
+			showError(6, TKN_GREATER, TKN_GREATER_EQ, TKN_LOWER, TKN_LOWER_EQ, TKN_NOT_EQUAL, TKN_EQUAL);
 			break;
 	}
 }
@@ -320,7 +331,7 @@ void SyntaticAnalysis::proc_addop(){
 			matchToken(TKN_OR);
 			break;
 		default:
-			showError();
+			showError(3, TKN_ADD, TKN_SUB, TKN_OR);
 			break;
 	}
 }
@@ -338,7 +349,7 @@ void SyntaticAnalysis::proc_mulop(){
 			matchToken(TKN_AND);
 			break;
 		default:
-			showError();
+			showError(3, TKN_MUL, TKN_DIV, TKN_AND);
 			break;
 	}
 }

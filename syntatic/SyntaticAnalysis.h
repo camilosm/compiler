@@ -15,7 +15,7 @@ class SyntaticAnalysis{
 		void start();
 		void matchToken(enum TokenType type);
 		int checkToken(int qt_tokens, ...);
-		void showError();
+		void showError(int qt_tokens, ...);
 
 		void proc_program();
 		void proc_decl_list();
