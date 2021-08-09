@@ -309,8 +309,8 @@ Note que ao final do processo obtém-se o lexema `("", END_OF_FILE)`, que é  um
 
 ## Análise sintática
 
-O analisador sintático, também conhecido como *parser*, é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
-Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**.  
+O **analisador sintático**, também conhecido como *parser*, é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
+Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**, também conhecido como ***parser* preditivo**.  
 Esse tipo de analisador sintático só funciona se a gramática for **LL(1)**.
 
 ### Gramática proposta
@@ -458,7 +458,7 @@ Para que a tabela fique enxuta, serão apenas marcadas onde existem produções,
 | \<addop\>       |   |   |   |   |   |   |   |   |    |    |   |   |    |    | + | + |   |   |   +  |    |    |      |    |       |      |       |       |     |       |        |      |      |    |       |
 | \<mulop\>       |   |   |   |   |   |   |   |   |    |    |   |   |    |    |   |   | + | + |      |  + |    |      |    |       |      |       |       |     |       |        |      |      |    |       |
 
-Conferindo a tabela, verificamos que cada célula possui nenhuma ou uma produção, logo a gramática é **LL(1)** e podemos implementar o **analisador sintático preditivo**.
+Conferindo a tabela, verificamos que cada célula possui nenhuma ou uma produção, logo a gramática é **LL(1)** e podemos implementar o **parser preditivo**.
 
 # Agradecimentos:
 
