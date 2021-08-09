@@ -37,13 +37,13 @@ Esse programa lê dois inteiros, e imprime sua soma.
 ## Implementação do compilador
 
 A implementação do compilador foi dividida em 4 fases:
-[analisador léxico](#analisador-léxico),
-[analisador sintático](#analisador-sintático),
-[analisador semântico](#analisador-semântico),
-[gerador de códico](#gerador-de-código).
+[análise léxico](#análise-léxica),
+[análise sintática](#análise-sintática),
+[análise semântico](#análise-semântica),
+[geração de códico](#geração-de-código).
 Cada uma dessas fases será detalhada a seguir.
 
-## Analisador léxico
+## Análise Léxica
 
 O analisador léxico é responsável por separar os *tokens* da linguagem.
 *Tokens* são os menores elementos que podem ser formados por um programa.
@@ -135,7 +135,7 @@ Já os últimos tipos são usados para representar os tipos:
 Todos os outros são designados para palavras-reservadas ou símbolos da linguagem.
 Para o programa de exemplo, os lexemas obtidos podem ser vistos na seção de [resultado](#resultado).
 
-### Tabela de Símbolos
+### Tabela de símbolos
 
 A tabela de símbolos (`SymbolTable`) é uma estrutura auxiliar utilizada para facilitar o casamento de um *token* com seu tipo e armazenar **Lexemas** identificadores declarados.
 A tabela de símbolos é um dicionário que mapeia uma chave (**token**) com seu valor (**TokenType**).
@@ -153,7 +153,7 @@ Essa tabela é pré-populada para todas as palavras-reservadas e símbolos da li
 Note que não é possível preencher essa tabela com todos os números existentes, nem com todos os possíveis identificadores que possam vir a ser criados por um programa. Logo, a tabela vai sendo incrementada com os identificadores lidos ao longo da análise.
 Também não é populada com os três tipos especiais (`TKN_UNEXPECTED_EOF`, `TKN_INVALID_TOKEN`, `TKN_END_OF_FILE`).
 
-### Autômato Finito Determinístico
+### Autômato finito determinístico
 
 Existem várias estratégias para formação de lexemas, na implementação desse interpretador será utilizado um autômato finito determinístico, também conhecido como máquina de estados, conforme diagrama a seguir.
 
@@ -166,6 +166,8 @@ A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>
 O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.  
 Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.  
 O analisador léxico implementa esse autômato.  
+
+### Analisador Léxico
 
 O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.  
 Deve ser possível *devolver* um caractere para o buffer de leitura.  
@@ -305,9 +307,9 @@ lexemas, nessa ordem:
 
 Note que ao final do processo obtém-se o lexema `("", END_OF_FILE)`, que é  um marcador que o analisador léxico processou o arquivo de entrada corretamente e chegou a um fim de arquivo sem erros léxicos.
 
-## Analisador sintático
+## Análise sintática
 
-O analisador sintático é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
+O analisador sintático, também conhecido como *parser*, é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
 Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**.  
 Esse tipo de analisador sintático só funciona se a gramática for **LL(1)**.
 
@@ -357,6 +359,8 @@ Para facilitar a leitura, produções estão entre `< >`.
 <caractere>		::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
 ```
 
+### Verificação da gramática
+
 É imediato que a gramática não é **LL(1)** pois possui recursão à esquerda e prefixos comuns.  
 Então vamos fazer alterações na gramática, obtendo uma gramática equivalente que seja **LL(1)**.  
 Primeiro faremos alterações que são imediatas:  
@@ -396,6 +400,8 @@ Com isso, temos a seguinte gramática:
 As regras para de formação de **tokens** continuam as mesmas.  
 Agora, para verificar se a gramática é **LL(1)**, vamos calcular os conjuntos ***FIRST*** e ***FOLLOW***.
 
+### *FIRST* e *FOLLOW*
+
 | Produção        | FIRST                           | FOLLOW                                           |
 |-----------------|---------------------------------|--------------------------------------------------|
 | \<program\>     | class                           | $                                                |
@@ -421,7 +427,10 @@ Agora, para verificar se a gramática é **LL(1)**, vamos calcular os conjuntos 
 | \<addop\>       | +, -, \|\|                      | +, -, \|\|, ;, >, >=, <, <=, !=, ==, )           |
 | \<mulop\>       | *, /, &&                        | *, /, &&, +, -, \|\|, ;, >, >=, <, <=, !=, ==, ) |
 
-E usando essa tabela, será montada a tabela do **analisador sintático preditivo**.  
+E usando essa tabela, será montada a tabela do **analisador sintático preditivo**.
+
+### Tabela do analisador sintático
+
 Para que a tabela fique enxuta, serão apenas marcadas onde existem produções, usando um `+` para cada produção:
 
 |      LL(1)      | ( | ) | { | } | , | ; | = | ! | == | != | < | > | <= | >= | + | - | * | / | \|\| | && | if | else | do | while | read | write | class | int | float | string | init | stop | id | const |
