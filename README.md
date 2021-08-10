@@ -114,7 +114,7 @@ enum TokenType {
 	TKN_STRING,			// string
 	TKN_INIT,			// init
 	TKN_STOP,			// stop
-	
+
 	// OTHERS
 	TKN_NUMBER_INT,		// integers
 	TKN_NUMBER_FLOAT,	// reals
@@ -159,19 +159,19 @@ Existem várias estratégias para formação de lexemas, na implementação dess
 
 ![AFD](images/lexical.png)
 
-O autômato possui estados (nomeados de 1 a 20) e arestas (rotuladas com símbolos, caracteres do programa).  
-Existe um único estado inicial - estado 1 - representado pelo estado com uma aresta entrante sem origem, e dois estados finais - estados 19 e 20 - representados pelo círculo duplo.  
-A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caractere do programa (*'s'*):  
+O autômato possui estados (nomeados de 1 a 20) e arestas (rotuladas com símbolos, caracteres do programa).
+Existe um único estado inicial - estado 1 - representado pelo estado com uma aresta entrante sem origem, e dois estados finais - estados 19 e 20 - representados pelo círculo duplo.
+A transição é dada de um estado x (*e<sub>x</sub>*) para um estado y (*e<sub>y</sub>*) sob um caractere do programa (*'s'*):
 *T(e<sub>x</sub>, 's') = e<sub>y</sub>*
-O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.  
-Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.  
-O analisador léxico implementa esse autômato.  
+O rótulo `ungetc` é um marcador especial que permite que um símbolo lido seja devolvido ao buffer para que seja lido novamente posteriormente.
+Isso é feito pois para encerrar o reconhecimento de alguns *tokens*, é necessário ler o próximo símbolo. Assim o símbolo que não faz parte do lexema a ser retornado, é devolvido ao buffer.
+O analisador léxico implementa esse autômato.
 
 ### Analisador Léxico
 
-O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.  
-Deve ser possível *devolver* um caractere para o buffer de leitura.  
-É usado o descritor `FILE\*` com a função `ungetc` nativa.  
+O analisador léxico deve abrir o arquivo de entrada que se deseja compilar.
+Deve ser possível *devolver* um caractere para o buffer de leitura.
+É usado o descritor `FILE\*` com a função `ungetc` nativa.
 Assim, o analisador léxico deve manter:
 * um apontador para o número da linha atual (`int m_line;`);
 * uma instância com a tabela de símbolos (`SymbolTable m_st;`);
@@ -309,18 +309,18 @@ Note que ao final do processo obtém-se o lexema `("", END_OF_FILE)`, que é  um
 
 ## Análise sintática
 
-O **analisador sintático**, também conhecido como *parser*, é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.  
-Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**, também conhecido como ***parser* preditivo**.  
+O **analisador sintático**, também conhecido como *parser*, é responsável por verificar se os **tokens** de um programa se encontram em uma ordem válida.
+Existem vários tipos de analisadores sintáticos, nesse compilador, implementaremos um **analisador sintático descendente recursivo**, ou **analisador sintático preditivo**, também conhecido como ***parser* preditivo**.
 Esse tipo de analisador sintático só funciona se a gramática for **LL(1)**.
 
 ### Gramática proposta
 
-A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extended Backus-Naur Form).  
+A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extended Backus-Naur Form).
 Para facilitar a leitura, produções estão entre `< >`.
 
 ```
-<program> 		::= class identifier [ <decl_list> ] <body>
-<decl_list> 	::= <decl> ';' { <decl> ';' }
+<program>		::= class identifier [ <decl_list> ] <body>
+<decl_list>		::= <decl> ';' { <decl> ';' }
 <decl> 			::= <type> <ident_list>
 <type> 			::= int | float | string
 <ident_list> 	::= identifier { ',' identifier }
@@ -361,17 +361,17 @@ Para facilitar a leitura, produções estão entre `< >`.
 
 ### Verificação da gramática
 
-É imediato que a gramática não é **LL(1)** pois possui recursão à esquerda e prefixos comuns.  
-Então vamos fazer alterações na gramática, obtendo uma gramática equivalente que seja **LL(1)**.  
-Primeiro faremos alterações que são imediatas:  
-- Produções unitárias `<writable> ::= <simple_expr>` e `<condition> ::= <expression>` removidas;  
-- Alteração na produção `<if_stmt>` para não ter de ambiguidade no `else`;  
-- Alteração na produção `<expression>` para remover recursão à esquerda;  
-- Alteração na produção `<simple_expr>` para remover recursão à esquerda;  
-- Alteração na produção `<term>` para remover recursão à esquerda;  
-- Simplificação visual da produção `<factor_a>`;  
+É imediato que a gramática não é **LL(1)** pois possui recursão à esquerda e prefixos comuns.
+Então vamos fazer alterações na gramática, obtendo uma gramática equivalente que seja **LL(1)**.
+Primeiro faremos alterações que são imediatas:
+- Produções unitárias `<writable> ::= <simple_expr>` e `<condition> ::= <expression>` removidas;
+- Alteração na produção `<if_stmt>` para não ter de ambiguidade no `else`;
+- Alteração na produção `<expression>` para remover recursão à esquerda;
+- Alteração na produção `<simple_expr>` para remover recursão à esquerda;
+- Alteração na produção `<term>` para remover recursão à esquerda;
+- Simplificação visual da produção `<factor_a>`;
 
-Com isso, temos a seguinte gramática:  
+Com isso, temos a seguinte gramática:
 ```
 <program>		::= class identifier [ <decl_list> ] <body>
 <decl_list>		::= <decl> ';' { <decl> ';' }
@@ -397,7 +397,7 @@ Com isso, temos a seguinte gramática:
 <mulop>			::= '*' | '/' | '&&'
 ```
 
-As regras para de formação de **tokens** continuam as mesmas.  
+As regras para de formação de **tokens** continuam as mesmas.
 Agora, para verificar se a gramática é **LL(1)**, vamos calcular os conjuntos ***FIRST*** e ***FOLLOW***.
 
 ### *FIRST* e *FOLLOW*
