@@ -321,15 +321,15 @@ Para facilitar a leitura, produções estão entre `< >`.
 ```
 <program>		::= class identifier [ <decl_list> ] <body>
 <decl_list>		::= <decl> ';' { <decl> ';' }
-<decl> 			::= <type> <ident_list>
-<type> 			::= int | float | string
-<ident_list> 	::= identifier { ',' identifier }
-<body> 			::= init <stmt_list> stop
-<stmt_list> 	::= <stmt> ';' { <stmt> ';' }
-<stmt> 			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
-<assign_stmt> 	::= identifier '=' <simple_expr>
-<if_stmt> 		::= if '(' <condition> ')' '{' <stmt_list> '}' | if '(' <condition> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
-<condition> 	::= <expression>
+<decl>			::= <type> <ident_list>
+<type>			::= int | float | string
+<ident_list>	::= identifier { ',' identifier }
+<body>			::= init <stmt_list> stop
+<stmt_list>		::= <stmt> ';' { <stmt> ';' }
+<stmt>			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
+<assign_stmt>	::= identifier '=' <simple_expr>
+<if_stmt>		::= if '(' <condition> ')' '{' <stmt_list> '}' | if '(' <condition> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
+<condition>		::= <expression>
 <do_stmt>		::= do '{' <stmt_list> '}' <do_suffix>
 <do_suffix>		::= while '(' <condition> ')'
 <read_stmt>		::= read '(' identifier ')'
