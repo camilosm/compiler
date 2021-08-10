@@ -18,7 +18,7 @@ int LexicalAnalysis::line() const {
 Lexeme LexicalAnalysis::nextToken(){
 	Lexeme lex;
 	int state = 1;
-	
+
 	while (state != 19 && state != 20){
 		int c = fgetc(m_file);
 
@@ -123,7 +123,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				else if(c=='*')
 					state = 5;
 				else
-					state = 4;				
+					state = 4;
 				break;
 
 			case 6:
@@ -136,7 +136,7 @@ Lexeme LexicalAnalysis::nextToken(){
 						ungetc(c, m_file);
 						if(c=='\n')
 							m_line--;
-					}						
+					}
 					state = 19;
 				}
 				break;
@@ -185,7 +185,7 @@ Lexeme LexicalAnalysis::nextToken(){
 					state = 19;
 				}
 				break;
-			
+
 			case 10:
 				if(c=='_' || isdigit(c) || isalpha(c)){
 					lex.token += (char)c;

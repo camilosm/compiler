@@ -9,12 +9,12 @@ int main(int argc, char* argv[]){
         std::cout << "Uso: " << argv[0] << " [programa]" << std::endl;
         exit(1);
     }
-    
+
     try{
         Lexeme lex;
         LexicalAnalysis lexical(argv[1]);
         SyntaticAnalysis syntatic(lexical);
-        
+
         syntatic.start();
     }
     catch(const std::string& error){

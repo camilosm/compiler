@@ -7,7 +7,7 @@ class SyntaticAnalysis{
 	private:
 		LexicalAnalysis& m_lex;
 		Lexeme m_current;
-	
+
 	public:
 		SyntaticAnalysis(LexicalAnalysis& lex);
 		virtual ~SyntaticAnalysis();

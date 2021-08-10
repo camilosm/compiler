@@ -46,7 +46,7 @@ enum TokenType {
 	TKN_STRING,			// string
 	TKN_INIT,			// init
 	TKN_STOP,			// stop
-	
+
 	// OTHERS
 	TKN_NUMBER_INT,		// integers
 	TKN_NUMBER_FLOAT,	// reals
@@ -77,7 +77,7 @@ inline std::string tt2str(enum TokenType type){
 			return "TKN_COMMA";
 		case TKN_SEMICOLON:
 			return "TKN_SEMICOLON";
-		
+
 		// OPERATORS
 		case TKN_ASSIGN:
 			return "TKN_ASSIGN";
@@ -107,7 +107,7 @@ inline std::string tt2str(enum TokenType type){
 			return "TKN_OR";
 		case TKN_AND:
 			return "TKN_AND";
-		
+
 		// KEYWORDS
 		case TKN_IF:
 			return "TKN_IF";
