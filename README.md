@@ -398,7 +398,7 @@ Com isso, temos a seguinte gramática:
 ```
 
 As regras para de formação de **tokens** continuam as mesmas.
-Agora, para verificar se a gramática é **LL(1)**, vamos calcular os conjuntos ***FIRST*** e ***FOLLOW***.
+Agora, para verificar se a nova gramática é **LL(1)**, vamos calcular os conjuntos ***FIRST*** e ***FOLLOW***.
 
 ### *FIRST* e *FOLLOW*
 
