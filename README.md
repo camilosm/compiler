@@ -462,7 +462,33 @@ Conferindo a tabela, verificamos que cada célula possui nenhuma ou uma produç�
 
 ### *Parser preditivo*
 
+#### Parser
 
+O *parser* recebe do **analisador léxico** os *tokens* do programa de entrada, e a cada *token* decide qual será o próximo método, cada método equivale a uma produção da gramática. Assim, o *parser* deve manter:
+
+* um analisador sintático (`LexicalAnalysis& m_lex;`);
+* um lexema atual que será o próximo a ser analisado (`Lexeme m_current;`);
+
+```cpp
+class SyntaticAnalysis{
+	private:
+		LexicalAnalysis& m_lex;
+		Lexeme m_current;
+```
+
+O *parser* funciona principalmente com o método `matchToken(enum TokenType token)`, usado para conferir se o lexema atual é um *token* do tipo esperado. Se for, o *parser* consome este, e pede um novo lexema ao analisador léxico, caso contrário, um erro é mostrado.
+Outros métodos auxiliares são utilizados:
+* `checkToken(int qt_tokens, ...)`: verificar se o lexema atual é um *token* que pode ser aceito no momento;
+* `showError(int qt_tokens, ...)`: gerencia a exibição e recuperação de erros.
+
+Existem três tipos de erros sintáticos para essa linguagem:
+1. **lexema inválido**: produzido pelo analisador léxico;
+2. **fim de arquivo inesperado**: produzido pelo analisador léxico ou sintático;
+3. **lexema não esperado**: caso o próximo *token* não seja o esperado.
+
+O compilador exibe uma mensagem de acordo com o tipo de erro com o número da linha onde ele ocorreu, informando quais eram as possibilidades de *tokens* aceitáveis, e qual *token* foi encontrado. Nessa implementação, a cada erro o *parser* exibe a mensagem e continua analisando, sendo interrompido apenas ao fim do arquivo.
+
+Existe um método especial `start` para dar início ao processo de análise, esse método chama a primeira regra de partida (`<program>`) e logo depois tenta um casamento de *token* com o fim de arquivo normal/esperado. Assim, o *parser* analisa todos os tokens recebidos até que chegue ao final do arquivo esperado, o que significa que o programa é válido pelas regras da gramática.
 
 # Agradecimentos:
 
