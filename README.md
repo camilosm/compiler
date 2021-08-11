@@ -462,8 +462,6 @@ Conferindo a tabela, verificamos que cada célula possui nenhuma ou uma produç�
 
 ### *Parser preditivo*
 
-#### Parser
-
 O *parser* recebe do **analisador léxico** os *tokens* do programa de entrada, e a cada *token* decide qual será o próximo método, cada método equivale a uma produção da gramática. Assim, o *parser* deve manter:
 
 * um analisador sintático (`LexicalAnalysis& m_lex;`);
