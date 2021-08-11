@@ -78,48 +78,48 @@ enum TokenType {
 	TKN_END_OF_FILE = 0,
 
 	// SYMBOLS
-	TKN_OPEN_PAR,		// (
-	TKN_CLOSE_PAR,		// )
-	TKN_OPEN_CUR,		// {
-	TKN_CLOSE_CUR,		// }
-	TKN_COMMA,			// ,
-	TKN_SEMICOLON,		// ;
+	TKN_OPEN_PAR,       // (
+	TKN_CLOSE_PAR,      // )
+	TKN_OPEN_CUR,       // {
+	TKN_CLOSE_CUR,      // }
+	TKN_COMMA,          // ,
+	TKN_SEMICOLON,      // ;
 
 	// OPERATORS
-	TKN_ASSIGN,			// =
-	TKN_NOT,			// !
-	TKN_EQUAL,			// ==
-	TKN_NOT_EQUAL,		// !=
-	TKN_LOWER,			// <
-	TKN_GREATER,		// >
-	TKN_LOWER_EQ,		// <=
-	TKN_GREATER_EQ,		// >=
-	TKN_ADD,			// +
-	TKN_SUB,			// -
-	TKN_MUL,			// *
-	TKN_DIV,			// /
-	TKN_OR,				// ||
-	TKN_AND,			// &&
+	TKN_ASSIGN,         // =
+	TKN_NOT,            // !
+	TKN_EQUAL,          // ==
+	TKN_NOT_EQUAL,      // !=
+	TKN_LOWER,          // <
+	TKN_GREATER,        // >
+	TKN_LOWER_EQ,       // <=
+	TKN_GREATER_EQ,     // >=
+	TKN_ADD,            // +
+	TKN_SUB,            // -
+	TKN_MUL,            // *
+	TKN_DIV,            // /
+	TKN_OR,             // ||
+	TKN_AND,            // &&
 
 	// KEYWORDS
-	TKN_IF,				// if
-	TKN_ELSE,			// else
-	TKN_DO,				// do
-	TKN_WHILE,			// while
-	TKN_READ,			// read
-	TKN_WRITE,			// write
-	TKN_CLASS,			// class
-	TKN_INT,			// int
-	TKN_FLOAT,			// float
-	TKN_STRING,			// string
-	TKN_INIT,			// init
-	TKN_STOP,			// stop
+	TKN_IF,             // if
+	TKN_ELSE,           // else
+	TKN_DO,             // do
+	TKN_WHILE,          // while
+	TKN_READ,           // read
+	TKN_WRITE,          // write
+	TKN_CLASS,          // class
+	TKN_INT,            // int
+	TKN_FLOAT,          // float
+	TKN_STRING,         // string
+	TKN_INIT,           // init
+	TKN_STOP,           // stop
 
 	// OTHERS
-	TKN_NUMBER_INT,		// integers
-	TKN_NUMBER_FLOAT,	// reals
-	TKN_LITERAL_STRING,	// strings
-	TKN_ID				// variable
+	TKN_NUMBER_INT,     // integers
+	TKN_NUMBER_FLOAT,   // reals
+	TKN_LITERAL_STRING, // strings
+	TKN_ID              // variable
 };
 ```
 
@@ -319,44 +319,44 @@ A gramática proposta para a linguagem é dada a seguir no formato EBNF (Extende
 Para facilitar a leitura, produções estão entre `< >`.
 
 ```
-<program>		::= class identifier [ <decl_list> ] <body>
-<decl_list>		::= <decl> ';' { <decl> ';' }
-<decl>			::= <type> <ident_list>
-<type>			::= int | float | string
-<ident_list>	::= identifier { ',' identifier }
-<body>			::= init <stmt_list> stop
-<stmt_list>		::= <stmt> ';' { <stmt> ';' }
-<stmt>			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
-<assign_stmt>	::= identifier '=' <simple_expr>
-<if_stmt>		::= if '(' <condition> ')' '{' <stmt_list> '}' | if '(' <condition> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
-<condition>		::= <expression>
-<do_stmt>		::= do '{' <stmt_list> '}' <do_suffix>
-<do_suffix>		::= while '(' <condition> ')'
-<read_stmt>		::= read '(' identifier ')'
-<write_stmt>	::= write '(' <writable> ')'
-<writable>		::= <simple_expr>
-<expression>	::= <simple_expr> | <simple_expr> <relop> <simple_expr>
-<simple_expr>	::= <term> | <simple_expr> <addop> <term>
-<term>			::= <factor_a> | <term> <mulop> <factor_a>
-<factor_a>		::= <factor> | '!' <factor> | '-' <factor>
-<factor>		::= identifier | constant | '(' <expression> ')'
-<relop>			::= '>' | '>=' | '<' | '<=' | '!=' | '=='
-<addop>			::= '+' | '-' | '||'
-<mulop>			::= '*' | '/' | '&&'
+<program>       ::= class identifier [ <decl_list> ] <body>
+<decl_list>     ::= <decl> ';' { <decl> ';' }
+<decl>          ::= <type> <ident_list>
+<type>          ::= int | float | string
+<ident_list>    ::= identifier { ',' identifier }
+<body>          ::= init <stmt_list> stop
+<stmt_list>     ::= <stmt> ';' { <stmt> ';' }
+<stmt>          ::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
+<assign_stmt>   ::= identifier '=' <simple_expr>
+<if_stmt>       ::= if '(' <condition> ')' '{' <stmt_list> '}' | if '(' <condition> ')' '{' <stmt_list> '}' else '{' <stmt_list> '}'
+<condition>     ::= <expression>
+<do_stmt>       ::= do '{' <stmt_list> '}' <do_suffix>
+<do_suffix>     ::= while '(' <condition> ')'
+<read_stmt>     ::= read '(' identifier ')'
+<write_stmt>    ::= write '(' <writable> ')'
+<writable>      ::= <simple_expr>
+<expression>    ::= <simple_expr> | <simple_expr> <relop> <simple_expr>
+<simple_expr>   ::= <term> | <simple_expr> <addop> <term>
+<term>          ::= <factor_a> | <term> <mulop> <factor_a>
+<factor_a>      ::= <factor> | '!' <factor> | '-' <factor>
+<factor>        ::= identifier | constant | '(' <expression> ')'
+<relop>         ::= '>' | '>=' | '<' | '<=' | '!=' | '=='
+<addop>         ::= '+' | '-' | '||'
+<mulop>         ::= '*' | '/' | '&&'
 ```
 
 ### Padrão de formação dos tokens
 
 ```
-<constant>		::= <integer_const> | <literal> | <real_const>
-<integer_const>	::= <nonzero> { <digit> } | 0
-<real_const>	::= <interger_const> '.' <digit> { <digit> }
-<literal>		::= '"' { <caractere> } '"'
-<identifier>	::= <letter> { <letter> | <digit> | '_' }
-<letter>		::= [A_Za-z]
-<digit>			::= [0-9]
-<nonzero>		::= [1-9]
-<caractere>		::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
+<constant>      ::= <integer_const> | <literal> | <real_const>
+<integer_const> ::= <nonzero> { <digit> } | 0
+<real_const>    ::= <interger_const> '.' <digit> { <digit> }
+<literal>       ::= '"' { <caractere> } '"'
+<identifier>    ::= <letter> { <letter> | <digit> | '_' }
+<letter>        ::= [A_Za-z]
+<digit>         ::= [0-9]
+<nonzero>       ::= [1-9]
+<caractere>     ::= um dos 256 caracteres do conjunto ASCII, exceto as aspas e quebra de linha
 ```
 
 ### Verificação da gramática
@@ -373,28 +373,28 @@ Primeiro faremos alterações que são imediatas:
 
 Com isso, temos a seguinte gramática:
 ```
-<program>		::= class identifier [ <decl_list> ] <body>
-<decl_list>		::= <decl> ';' { <decl> ';' }
-<decl>			::= <type> <ident_list>
-<type>			::= int | float | string
-<ident_list>	::= identifier { ',' identifier }
-<body>			::= init <stmt_list> stop
-<stmt_list>		::= <stmt> ';' { <stmt> ';' }
-<stmt>			::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
-<assign_stmt>	::= identifier '=' <simple_expr>
-<if_stmt>		::= if '(' <expression> ')' '{' <stmt_list> '}' [ else '{' <stmt_list> '}' ]
-<do_stmt>		::= do '{' <stmt_list> '}' <do_suffix>
-<do_suffix>		::= while '(' <expression> ')'
-<read_stmt>		::= read '(' identifier ')'
-<write_stmt>	::= write '(' <simple_expr> ')'
-<expression>	::= <simple_expr> [ <relop> <simple_expr> ]
-<simple_expr>	::= <term> { <addop> <term> }
-<term>			::= <factor_a> { <mulop> <factor_a> }
-<factor_a>		::= [ ( '!' | '-' ) ] <factor>
-<factor>		::= identifier | constant | '(' <expression> ')'
-<relop>			::= '>' | '>=' | '<' | '<=' | '!=' | '=='
-<addop>			::= '+' | '-' | '||'
-<mulop>			::= '*' | '/' | '&&'
+<program>       ::= class identifier [ <decl_list> ] <body>
+<decl_list>     ::= <decl> ';' { <decl> ';' }
+<decl>          ::= <type> <ident_list>
+<type>          ::= int | float | string
+<ident_list>    ::= identifier { ',' identifier }
+<body>          ::= init <stmt_list> stop
+<stmt_list>     ::= <stmt> ';' { <stmt> ';' }
+<stmt>          ::= <assign_stmt> | <if_stmt> | <do_stmt> | <read_stmt> | <write_stmt>
+<assign_stmt>   ::= identifier '=' <simple_expr>
+<if_stmt>       ::= if '(' <expression> ')' '{' <stmt_list> '}' [ else '{' <stmt_list> '}' ]
+<do_stmt>       ::= do '{' <stmt_list> '}' <do_suffix>
+<do_suffix>     ::= while '(' <expression> ')'
+<read_stmt>     ::= read '(' identifier ')'
+<write_stmt>    ::= write '(' <simple_expr> ')'
+<expression>    ::= <simple_expr> [ <relop> <simple_expr> ]
+<simple_expr>   ::= <term> { <addop> <term> }
+<term>          ::= <factor_a> { <mulop> <factor_a> }
+<factor_a>      ::= [ ( '!' | '-' ) ] <factor>
+<factor>        ::= identifier | constant | '(' <expression> ')'
+<relop>         ::= '>' | '>=' | '<' | '<=' | '!=' | '=='
+<addop>         ::= '+' | '-' | '||'
+<mulop>         ::= '*' | '/' | '&&'
 ```
 
 As regras para de formação de **tokens** continuam as mesmas.
@@ -459,6 +459,10 @@ Para que a tabela fique enxuta, serão apenas marcadas onde existem produções,
 | \<mulop\>       |   |   |   |   |   |   |   |   |    |    |   |   |    |    |   |   | + | + |      |  + |    |      |    |       |      |       |       |     |       |        |      |      |    |       |
 
 Conferindo a tabela, verificamos que cada célula possui nenhuma ou uma produção, logo a gramática é **LL(1)** e podemos implementar o **parser preditivo**.
+
+### *Parser preditivo*
+
+
 
 # Agradecimentos:
 
