@@ -1,4 +1,5 @@
 class Teste7
-	int a,b,=;
-	/*
-stop*/
+	int a,b,c;
+init
+	a=1;
+stop
