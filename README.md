@@ -490,5 +490,4 @@ Existe um método especial `start` para dar início ao processo de análise, ess
 
 # Agradecimentos:
 
-Doutor @rimsa, professor e inspiração.
-Esse trabalho foi desenvolvido usando como base a documentação disponível em https://github.com/rimsa/tiny.
+Doutor [@rimsa](https://www.github.com/rimsa), professor e inspiração. Esse trabalho foi desenvolvido usando como base a documentação do [Interpretador para Tiny](https://github.com/rimsa/tiny) escrito por ele.
