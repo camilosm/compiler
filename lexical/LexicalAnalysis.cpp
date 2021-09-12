@@ -359,7 +359,7 @@ Lexeme LexicalAnalysis::nextToken(){
 
 	if(state==19){
 		if(!m_st.contains(lex.token))
-			m_st.put(lex.token, lex.data.type);
+			m_st.put(lex);
 		lex=m_st.get(lex.token);
 	}
 

@@ -14,7 +14,8 @@ class SymbolTable{
 
 		bool contains(std::string token);
 		Lexeme get(std::string token);
-		bool put(std::string token, enum var_type type);
+		// bool put(std::string token, enum var_type type);
+		bool put(Lexeme lex);
 	private:
 		std::map<std::string, Lexeme> m_st;
 };
