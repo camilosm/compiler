@@ -6,14 +6,14 @@
 
 class LexicalAnalysis{
 	public:
-		LexicalAnalysis(const char* filename);
+		LexicalAnalysis(const char *filename, SymbolTable &st);
 		virtual ~LexicalAnalysis();
 		int line() const;
 		Lexeme nextToken();
 	private:
 		int m_line;
-		SymbolTable m_st;
-		FILE* m_file;
+		SymbolTable &m_st;
+		FILE *m_file;
 };
 
 #endif // LEXICAL_ANALYSIS_H

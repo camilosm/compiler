@@ -12,7 +12,8 @@ int main(int argc, char* argv[]){
 
     try{
         Lexeme lex;
-        LexicalAnalysis lexical(argv[1]);
+		SymbolTable st;
+        LexicalAnalysis lexical(argv[1], st);
         SyntaticAnalysis syntatic(lexical);
 
         syntatic.start();

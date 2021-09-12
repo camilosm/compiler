@@ -2,7 +2,7 @@
 
 #include "LexicalAnalysis.h"
 
-LexicalAnalysis::LexicalAnalysis(const char* filename):m_line(1){
+LexicalAnalysis::LexicalAnalysis(const char *filename, SymbolTable &st):m_line(1), m_st(st){
 	m_file = fopen(filename, "r");
 }
 
