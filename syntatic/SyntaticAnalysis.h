@@ -5,11 +5,12 @@
 
 class SyntaticAnalysis{
 	private:
-		LexicalAnalysis& m_lex;
+		LexicalAnalysis &m_lex;
 		Lexeme m_current;
+		SymbolTable &m_st;
 
 	public:
-		SyntaticAnalysis(LexicalAnalysis& lex);
+		SyntaticAnalysis(LexicalAnalysis &lex, SymbolTable &st);
 		virtual ~SyntaticAnalysis();
 
 		void start();

@@ -3,8 +3,8 @@
 
 #include "SyntaticAnalysis.h"
 
-SyntaticAnalysis::SyntaticAnalysis(LexicalAnalysis& lex):
-	m_lex(lex), m_current(lex.nextToken()){
+SyntaticAnalysis::SyntaticAnalysis(LexicalAnalysis &lex, SymbolTable &st):
+	m_lex(lex), m_st(st), m_current(lex.nextToken()){
 }
 
 SyntaticAnalysis::~SyntaticAnalysis(){
