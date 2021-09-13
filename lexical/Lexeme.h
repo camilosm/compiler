@@ -18,23 +18,23 @@ enum var_type {
 struct Lexeme{
 	std::string token;
 	enum TokenType type;
+	// enum var_type data_type;
 	union {
-		enum var_type type;
 		int int_value;
 		float float_value;
-	} data;
+		char string_value[255];
+	} data_value;
 
-	Lexeme(): token(""), type(TKN_END_OF_FILE){
-		memset(&data,0,sizeof(data));
+	Lexeme(): token(""), type(TKN_INVALID_TOKEN){
+		memset(&data_value,0,sizeof(data_value));
 	}
 	Lexeme(std::string token, enum TokenType type):token(token), type(type){
-		memset(&data,0,sizeof(data));
+		memset(&data_value,0,sizeof(data_value));
 	}
 	virtual ~Lexeme(){}
 
 	const std::string str(){
 		std::stringstream ss;
-
 		ss << "(\"" << token << "\", " << tt2str(type) << ")";
 		return ss.str();
 	}
