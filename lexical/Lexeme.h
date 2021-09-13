@@ -13,12 +13,12 @@ enum var_type {
 	NUMBER_FLOAT,
 	LITERAL_STRING
 };
-//classe?
 
+//class?
 struct Lexeme{
 	std::string token;
 	enum TokenType type;
-	// enum var_type data_type;
+	enum var_type data_type;
 	union {
 		int int_value;
 		float float_value;
