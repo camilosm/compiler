@@ -209,7 +209,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				}
 				else{
 					lex.type = TKN_NUMBER_INT;
-					lex.data.int_value = 0;
+					lex.data_value.int_value = 0;
 					if(c!=EOF){
 						ungetc(c, m_file);
 						if(c=='\n')
@@ -249,7 +249,7 @@ Lexeme LexicalAnalysis::nextToken(){
 							m_line--;
 					}
 					lex.type = TKN_NUMBER_FLOAT;
-					lex.data.float_value = std::stof(lex.token);
+					lex.data_value.float_value = std::stof(lex.token);
 					state = 20;
 				}
 				break;
@@ -270,7 +270,7 @@ Lexeme LexicalAnalysis::nextToken(){
 							m_line--;
 					}
 					lex.type = TKN_NUMBER_INT;
-					lex.data.int_value = std::stoi(lex.token);
+					lex.data_value.int_value = std::stoi(lex.token);
 					state = 20;
 				}
 				break;
@@ -303,7 +303,7 @@ Lexeme LexicalAnalysis::nextToken(){
 							m_line--;
 					}
 					lex.type = TKN_NUMBER_FLOAT;
-					lex.data.float_value = std::stof(lex.token);
+					lex.data_value.float_value = std::stof(lex.token);
 					state = 20;
 				}
 				break;
