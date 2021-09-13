@@ -209,7 +209,7 @@ Lexeme LexicalAnalysis::nextToken(){
 				}
 				else{
 					lex.type = TKN_NUMBER_INT;
-					lex.data_value.int_value = 0;
+					lex.data_value.int_value = stoi(lex.token);
 					if(c!=EOF){
 						ungetc(c, m_file);
 						if(c=='\n')
