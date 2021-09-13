@@ -25,7 +25,7 @@ struct Lexeme{
 		char string_value[255];
 	} data_value;
 
-	Lexeme(): token(""), type(TKN_INVALID_TOKEN){
+	Lexeme(): token(""), type(TKN_INVALID_TOKEN), data_type(UNKNOWN_TYPE){
 		memset(&data_value,0,sizeof(data_value));
 	}
 	Lexeme(std::string token, enum TokenType type):token(token), type(type){
